@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Clipboard Extension",
+    "version": "1.0",
+    "description": "A clipboard extension to manage multiple clipboard items, with features like history, pinning, and deletion.",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    },
+    "permissions": ["clipboardRead", "clipboardWrite", "storage"]
+  }
+  
