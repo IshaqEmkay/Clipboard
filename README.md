@@ -1,0 +1,1 @@
+Clipboard for Chrome Extension
