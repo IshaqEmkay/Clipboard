@@ -61,8 +61,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
   
+      const copyButton = document.createElement('button');
+      copyButton.textContent = 'Copy';
+      copyButton.addEventListener('click', function() {
+        // Handle copying item to clipboard
+        navigator.clipboard.writeText(item).then(() => {
+          console.log('Text copied to clipboard');
+        }).catch(err => {
+          console.error('Could not copy text: ', err);
+        });
+      });
+  
       li.appendChild(pinButton);
       li.appendChild(deleteButton);
+      li.appendChild(copyButton);
       clipboardList.appendChild(li);
     }
   });
