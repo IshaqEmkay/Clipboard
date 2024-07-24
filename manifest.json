@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Clipboard Extension",
+    "name": "Clipboard",
     "version": "1.2",
     "description": "A clipboard extension to manage multiple clipboard items, with features like history, pinning, and deletion.",
     "action": {
