@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const newItemInput = document.getElementById('newItem');
-    const addItemButton = document.getElementById('addItem');
     const clipboardList = document.getElementById('clipboardList');
   
     // Load clipboard items from storage
@@ -11,16 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   
-    // Add new item to the clipboard
-    addItemButton.addEventListener('click', function() {
-      const newItem = newItemInput.value.trim();
-      if (newItem) {
+    // Listen for messages from the content script
+    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      if (request.text) {
         chrome.storage.sync.get(['clipboardItems'], function(result) {
           const items = result.clipboardItems || [];
-          items.push(newItem);
+          items.push(request.text);
           chrome.storage.sync.set({clipboardItems: items}, function() {
-            addClipboardItem(newItem);
-            newItemInput.value = '';
+            addClipboardItem(request.text);
           });
         });
       }
