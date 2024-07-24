@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Load clipboard items from storage
     chrome.storage.sync.get(['clipboardItems'], function(result) {
+      console.log('Loaded clipboard items from storage:', result.clipboardItems);
       const items = result.clipboardItems || [];
       items.forEach(item => {
         addClipboardItem(item);
@@ -11,11 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
     // Listen for messages from the content script
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+      console.log('Received message:', request);
       if (request.text) {
         chrome.storage.sync.get(['clipboardItems'], function(result) {
           const items = result.clipboardItems || [];
           items.push(request.text);
           chrome.storage.sync.set({clipboardItems: items}, function() {
+            console.log('Stored clipboard items:', items);
             addClipboardItem(request.text);
           });
         });
@@ -38,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             items.splice(index, 1);
             items.unshift(item);
             chrome.storage.sync.set({clipboardItems: items}, function() {
+              console.log('Pinned item:', item);
               clipboardList.removeChild(li);
               addClipboardItem(item);
             });
@@ -55,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (index > -1) {
             items.splice(index, 1);
             chrome.storage.sync.set({clipboardItems: items}, function() {
+              console.log('Deleted item:', item);
               clipboardList.removeChild(li);
             });
           }
@@ -66,9 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
       copyButton.addEventListener('click', function() {
         // Handle copying item to clipboard
         navigator.clipboard.writeText(item).then(() => {
+          console.log('Copied item to clipboard:', item);
           showCopiedMessage();
         }).catch(err => {
-          console.error('Could not copy text: ', err);
+          console.error('Could not copy text:', err);
         });
       });
   

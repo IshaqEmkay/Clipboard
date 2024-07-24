@@ -1,12 +1,13 @@
-document.addEventListener('copy', function(e) {
+document.addEventListener('copy', (event) => {
     const copiedText = document.getSelection().toString();
     console.log('Copied text:', copiedText);
-    chrome.runtime.sendMessage({text: copiedText});
-  });
   
-document.addEventListener('cut', function(e) {
-    const cutText = document.getSelection().toString();
-    console.log('Cut text:', cutText);
-    chrome.runtime.sendMessage({text: cutText});
+    chrome.runtime.sendMessage({ text: copiedText }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error sending message:', chrome.runtime.lastError);
+      } else {
+        console.log('Message sent:', response);
+      }
+    });
   });
   
