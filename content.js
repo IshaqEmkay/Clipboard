@@ -4,7 +4,7 @@ document.addEventListener('copy', function(e) {
     chrome.runtime.sendMessage({text: copiedText});
   });
   
-  document.addEventListener('cut', function(e) {
+document.addEventListener('cut', function(e) {
     const cutText = document.getSelection().toString();
     console.log('Cut text:', cutText);
     chrome.runtime.sendMessage({text: cutText});

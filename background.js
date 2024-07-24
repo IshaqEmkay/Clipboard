@@ -19,7 +19,7 @@ chrome.runtime.onInstalled.addListener(() => {
       saveToClipboard(request.text);
     }
   });
-  -
+  
   function saveToClipboard(text) {
     chrome.storage.sync.get(['clipboardItems'], function(result) {
       const items = result.clipboardItems || [];

@@ -82,18 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function showCopiedMessage() {
       const message = document.createElement('div');
       message.textContent = 'Copied';
-      message.style.position = 'fixed';
-      message.style.bottom = '10px';
-      message.style.right = '10px';
-      message.style.backgroundColor = '#4CAF50';
-      message.style.color = 'white';
-      message.style.padding = '10px';
-      message.style.borderRadius = '5px';
-      message.style.zIndex = '1000';
+      message.className = 'copied-message';
       document.body.appendChild(message);
   
       setTimeout(() => {
         document.body.removeChild(message);
       }, 2000);
     }
-  });  
+  });
+  
