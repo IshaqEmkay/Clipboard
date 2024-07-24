@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
       copyButton.addEventListener('click', function() {
         // Handle copying item to clipboard
         navigator.clipboard.writeText(item).then(() => {
-          console.log('Text copied to clipboard');
+          showCopiedMessage();
         }).catch(err => {
           console.error('Could not copy text: ', err);
         });
@@ -77,5 +77,23 @@ document.addEventListener('DOMContentLoaded', function() {
       li.appendChild(copyButton);
       clipboardList.appendChild(li);
     }
-  });
   
+    // Function to show the "Copied" message
+    function showCopiedMessage() {
+      const message = document.createElement('div');
+      message.textContent = 'Copied';
+      message.style.position = 'fixed';
+      message.style.bottom = '10px';
+      message.style.right = '10px';
+      message.style.backgroundColor = '#4CAF50';
+      message.style.color = 'white';
+      message.style.padding = '10px';
+      message.style.borderRadius = '5px';
+      message.style.zIndex = '1000';
+      document.body.appendChild(message);
+  
+      setTimeout(() => {
+        document.body.removeChild(message);
+      }, 2000);
+    }
+  });  
