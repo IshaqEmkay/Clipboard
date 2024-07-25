@@ -2,12 +2,14 @@
 <html>
 <head>
   <title>Clipboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Clipboard</h1>
-    <ul id="clipboardList" class="clipboard-list"></ul>
+  <div class="container mt-2">
+    <h4>Clipboard</h4>
+    <ul id="clipboardList" class="list-group"></ul>
+    <button id="clearClipboard" class="btn btn-danger mt-2">Clear Clipboard</button>
+    <div id="alertBox" class="alert alert-info mt-2" style="display: none;"></div>
   </div>
   <script src="popup.js"></script>
 </body>
