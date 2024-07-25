@@ -1,26 +1,39 @@
 body {
-    font-family: Arial, sans-serif;
-    width: 300px;
-    padding: 10px;
-  }
-  
-  h1 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  button {
-    margin-left: 5px;
-  }
-  
+  font-family: Arial, sans-serif;
+  width: 300px;
+  margin: 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.container {
+  width: 100%;
+}
+
+h4 {
+  margin-bottom: 10px;
+}
+
+.list-group {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin-left: 5px;
+}
+
+#alertBox {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 9999;
+  text-align: center;
+}

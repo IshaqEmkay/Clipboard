@@ -1,69 +1,76 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const clipboardList = document.getElementById('clipboardList');
-  
-    // Load clipboard items from storage
-    chrome.storage.sync.get(['clipboardItems'], function(result) {
-      const items = result.clipboardItems || [];
-      items.forEach(item => {
-        addClipboardItem(item);
-      });
+document.addEventListener('DOMContentLoaded', () => {
+  loadClipboardItems();
+
+  document.getElementById('clearClipboard').addEventListener('click', () => {
+    chrome.storage.sync.set({ clipboardItems: [] }, () => {
+      loadClipboardItems();
     });
-  
-    // Listen for messages from the content script
-    chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-      if (request.text) {
-        chrome.storage.sync.get(['clipboardItems'], function(result) {
-          const items = result.clipboardItems || [];
-          items.push(request.text);
-          chrome.storage.sync.set({clipboardItems: items}, function() {
-            addClipboardItem(request.text);
-          });
-        });
-      }
-    });
-  
-    // Function to add a clipboard item to the list
-    function addClipboardItem(item) {
-      const li = document.createElement('li');
-      li.textContent = item;
-  
-      const pinButton = document.createElement('button');
-      pinButton.textContent = 'Pin';
-      pinButton.addEventListener('click', function() {
-        // Handle pinning item (move to top)
-        chrome.storage.sync.get(['clipboardItems'], function(result) {
-          const items = result.clipboardItems || [];
-          const index = items.indexOf(item);
-          if (index > -1) {
-            items.splice(index, 1);
-            items.unshift(item);
-            chrome.storage.sync.set({clipboardItems: items}, function() {
-              clipboardList.removeChild(li);
-              addClipboardItem(item);
-            });
-          }
-        });
-      });
-  
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', function() {
-        // Handle deleting item
-        chrome.storage.sync.get(['clipboardItems'], function(result) {
-          const items = result.clipboardItems || [];
-          const index = items.indexOf(item);
-          if (index > -1) {
-            items.splice(index, 1);
-            chrome.storage.sync.set({clipboardItems: items}, function() {
-              clipboardList.removeChild(li);
-            });
-          }
-        });
-      });
-  
-      li.appendChild(pinButton);
-      li.appendChild(deleteButton);
-      clipboardList.appendChild(li);
-    }
   });
-  
+});
+
+function loadClipboardItems() {
+  chrome.storage.sync.get(['clipboardItems'], (result) => {
+    const items = result.clipboardItems || [];
+    const clipboardList = document.getElementById('clipboardList');
+    clipboardList.innerHTML = '';
+
+    items.forEach((item, index) => {
+      const listItem = document.createElement('li');
+      listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+      const textSpan = document.createElement('span');
+      textSpan.textContent = item;
+
+      const buttonGroup = document.createElement('div');
+
+      const copyButton = document.createElement('button');
+      copyButton.className = 'btn btn-primary btn-sm mr-1';
+      copyButton.textContent = 'Copy';
+      copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(item).then(() => {
+          showAlert('Copied');
+        });
+      });
+
+      const deleteButton = document.createElement('button');
+      deleteButton.className = 'btn btn-danger btn-sm';
+      deleteButton.textContent = 'Delete';
+      deleteButton.addEventListener('click', () => {
+        items.splice(index, 1);
+        chrome.storage.sync.set({ clipboardItems: items }, () => {
+          loadClipboardItems();
+        });
+      });
+
+      const pinButton = document.createElement('button');
+      pinButton.className = 'btn btn-success btn-sm';
+      pinButton.textContent = 'Pin';
+      pinButton.addEventListener('click', () => {
+        items.splice(index, 1);
+        items.unshift(item);
+        chrome.storage.sync.set({ clipboardItems: items }, () => {
+          loadClipboardItems();
+        });
+      });
+
+      buttonGroup.appendChild(copyButton);
+      buttonGroup.appendChild(deleteButton);
+      buttonGroup.appendChild(pinButton);
+
+      listItem.appendChild(textSpan);
+      listItem.appendChild(buttonGroup);
+
+      clipboardList.appendChild(listItem);
+    });
+  });
+}
+
+function showAlert(message) {
+  const alertBox = document.getElementById('alertBox');
+  alertBox.textContent = message;
+  alertBox.style.display = 'block';
+
+  setTimeout(() => {
+    alertBox.style.display = 'none';
+  }, 2000);
+}
